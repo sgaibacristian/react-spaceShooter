@@ -1,11 +1,5 @@
 import React, { useState, useRef } from "react";
-import {
-  Box,
-  Button,
-  createTheme,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
+import { Box, createTheme, ThemeProvider } from "@mui/material";
 import GameCanvas from "./Components/GameCanvas";
 import "./App.css";
 import StartGameScreen from "./Components/StartGameScreen";
@@ -36,11 +30,11 @@ function App() {
   };
   const handleBulletSound = () => {
     let bulletSound = new Audio("/audio/bullet-sound.mp3");
-    bulletSound.volume = 0.3; // Volum la jumătate (50%)
+    bulletSound.volume = 0.3; // Half volume
     bulletSound.play();
 
     bulletSound.addEventListener("ended", () => {
-      // Eliberăm obiectul audio din memorie
+      // Delete obj from memory
       bulletSound = null;
     });
   };

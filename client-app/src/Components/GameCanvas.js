@@ -57,6 +57,8 @@ const GameCanvas = ({ onGameOver, onGameStart, onBulletShoot }) => {
   const gamepadAnimationRef = useRef(null);
 
   const spaceshipImage = useRef(new Image());
+  const spaceshipImage2 = useRef(new Image());
+
   const enemyImage = useRef(new Image());
   const backgroundImage = useRef(new Image());
   const enemyIntervalRef = useRef(null);
@@ -107,6 +109,7 @@ const GameCanvas = ({ onGameOver, onGameStart, onBulletShoot }) => {
     if (gameOverRef.current || pauseRef.current) return;
 
     spaceshipImage.current.src = "/spaceship.png";
+    spaceshipImage2.current.src = "/spaceship2.png";
     enemyImage.current.src = "/enemy.png";
     backgroundImage.current.src = "/background.jpg";
 
@@ -126,7 +129,7 @@ const GameCanvas = ({ onGameOver, onGameStart, onBulletShoot }) => {
 
     onGameStart();
 
-    handleKeyboardInput(canShoot2, keys);
+    handleKeyboardInput(canShoot2, keys, setPause, pauseRef, pause);
 
     function update() {
       handleKeyboardMovement(keys, player2, playerSpeed);
@@ -156,7 +159,7 @@ const GameCanvas = ({ onGameOver, onGameStart, onBulletShoot }) => {
 
     function draw() {
       drawCanvas(canvas, ctx, backgroundImage);
-      drawPlayers(ctx, spaceshipImage, player, player2);
+      drawPlayers(ctx, spaceshipImage, spaceshipImage2, player, player2);
       drawBullets(ctx, bullets);
       drawEnemies(ctx, enemies, enemyImage);
     }
@@ -188,6 +191,7 @@ const GameCanvas = ({ onGameOver, onGameStart, onBulletShoot }) => {
     spawnEnemies(enemyIntervalRef, gameOverRef, pauseRef, enemies, canvas);
 
     return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       clearInterval(enemyIntervalRef.current);
       cancelAnimationFrame(animationRef.current);
       cancelAnimationFrame(gamepadAnimationRef.current); // Properly stopping gamepad loop

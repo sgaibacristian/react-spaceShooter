@@ -1,4 +1,10 @@
-export const handleKeyboardInput = (canShoot, keys) => {
+export const handleKeyboardInput = (
+  canShoot,
+  keys,
+  setPause,
+  pauseRef,
+  pause
+) => {
   function handleKeyDown(event) {
     if (event.key === "ArrowLeft" || event.key === "a") keys.left = true;
     if (event.key === "ArrowRight" || event.key === "d") keys.right = true;
@@ -13,6 +19,11 @@ export const handleKeyboardInput = (canShoot, keys) => {
     if (event.key === "ArrowUp" || event.key === "w") keys.up = false;
     if (event.key === "ArrowDown" || event.key === "s") keys.down = false;
     if (event.key === " ") keys.shoot = false;
+    if (event.key === "Escape") {
+      setPause(!pause);
+
+      pauseRef.current = true;
+    }
   }
 
   window.addEventListener("keydown", handleKeyDown);
@@ -20,10 +31,10 @@ export const handleKeyboardInput = (canShoot, keys) => {
 };
 
 export const handleKeyboardMovement = (keys, player, playerSpeed) => {
-  if (keys.left) player.current.x -= playerSpeed * 3;
-  if (keys.right) player.current.x += playerSpeed * 3;
-  if (keys.down) player.current.y += playerSpeed * 3;
-  if (keys.up) player.current.y -= playerSpeed * 3;
+  if (keys.left) player.current.x -= playerSpeed * 5;
+  if (keys.right) player.current.x += playerSpeed * 5;
+  if (keys.down) player.current.y += playerSpeed * 5;
+  if (keys.up) player.current.y -= playerSpeed * 5;
 };
 
 export const movePlayer2 = (canvas, player2) => {
@@ -127,7 +138,10 @@ export const updateEnemiesPositions = (
     e.y += 2;
     if (e.y > canvas.height) enemies.current.splice(i, 1);
 
-    if (detectCollision(e, player) || detectCollision(e, player2)) {
+    if (
+      detectCollision(e, player.current) ||
+      detectCollision(e, player2.current)
+    ) {
       gameOverRef.current = true;
       setGameOver(true);
     }
@@ -149,7 +163,13 @@ export const drawCanvas = (canvas, ctx, backgroundImage) => {
   ctx.drawImage(backgroundImage.current, 0, 0, canvas.width, canvas.height);
 };
 
-export const drawPlayers = (ctx, spaceshipImage, player, player2) => {
+export const drawPlayers = (
+  ctx,
+  spaceshipImage,
+  spaceshipImage2,
+  player,
+  player2
+) => {
   ctx.drawImage(
     spaceshipImage.current,
     player.current.x,
@@ -159,7 +179,7 @@ export const drawPlayers = (ctx, spaceshipImage, player, player2) => {
   );
 
   ctx.drawImage(
-    spaceshipImage.current,
+    spaceshipImage2.current,
     player2.current.x,
     player2.current.y,
     player2.current.width,
@@ -243,5 +263,5 @@ export const spawnEnemies = (
         height: 60,
       });
     }
-  }, 1000);
+  }, 500);
 };
